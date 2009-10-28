@@ -53,7 +53,15 @@ module Cash
     end
 
     def transaction_with_cache_transaction(&block)
-      repository.transaction { transaction_without_cache_transaction(&block) }
+      if cache_config
+        repository.transaction { transaction_without_cache_transaction(&block) }
+      else
+        transaction_without_cache_transaction(&block)
+      end
+    end
+
+    def cacheable?(*args)
+      true
     end
   end
 end
