@@ -2,7 +2,7 @@ yml = YAML.load(IO.read(File.join(RAILS_ROOT, "config", "memcached.yml")))
 memcache_config = yml[RAILS_ENV]
 memcache_config.symbolize_keys! if memcache_config.respond_to?(:symbolize_keys!)
 
-if defined?(DISABLE_CACHE_MONEY) || memcache_config.nil? || memcache_config[:cache_money] != true
+if defined?(DISABLE_CACHE_MONEY) || ENV['DISABLE_CACHE_MONEY'] == 'true' || memcache_config.nil? || memcache_config[:cache_money] != true
   Rails.logger.info 'cache-money disabled'
   class ActiveRecord::Base
     def self.index(*args)
