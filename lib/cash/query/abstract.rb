@@ -27,7 +27,7 @@ module Cash
           misses, missed_keys, objects = hit_or_miss(cache_keys, index, get_options)
           format_results(cache_keys, choose_deserialized_objects_if_possible(missed_keys, cache_keys, misses, objects))
         else
-          logger.debug("---- UNCACHEABLE #{table_name} - #{find_options.inspect} - #{get_options.inspect} - #{@options1.inspect} - #{@options2.inspect}") if logger
+          logger.debug("  \e[1;4;31mUNCACHEABLE\e[0m #{table_name} - #{find_options.inspect} - #{get_options.inspect} - #{@options1.inspect} - #{@options2.inspect}") if logger
           uncacheable
         end
       end
