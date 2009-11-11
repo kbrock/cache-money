@@ -120,6 +120,7 @@ module Cash
         conditions.split(AND).inject([]) do |indices, condition|
           matched, table_name, column_name, sql_value = *(KEY_EQ_VALUE.match(condition))
           if matched
+            raise "could not find column #{column_name} in columns #{columns_hash.keys.join(',')}" if sql_value != '?' && columns_hash[column_name].nil?
             value = sql_value == '?' ? values.shift : columns_hash[column_name].type_cast(sql_value)
             indices << [column_name, value]
           else
