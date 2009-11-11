@@ -58,9 +58,12 @@ module Cash
       def version
         @options[:version] || 1
       end
-
+      ## auto_index == false means don't automatically create and index for the primary key
+      def auto_index
+        @options[:auto_index] || true
+      end
       def indices
-        @indices ||= active_record == ActiveRecord::Base ? [] : [Index.new(self, active_record, active_record.primary_key)]
+        @indices ||= active_record == ActiveRecord::Base || !auto_index ? [] : [Index.new(self, active_record, active_record.primary_key)]
       end
 
       def inherit(active_record)

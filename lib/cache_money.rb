@@ -30,7 +30,7 @@ class ActiveRecord::Base
     if options == false
       include NoCash
     else
-      options.assert_valid_keys(:ttl, :repository, :version)
+      options.assert_valid_keys(:ttl, :repository, :version, :auto_index)
       include Cash unless ancestors.include?(Cash)
       Cash::Config.create(self, options)
     end
