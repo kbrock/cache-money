@@ -22,6 +22,15 @@ module Cash
       end
     end
 
+    def get_multi(*keys)
+      # the old memcached wants multiple arguments.
+      # the new memcached wants an array of arguments.
+      # this will give the new memcached what it wants regardless of what you
+      # pass in yourself.
+      keys.flatten!
+      @cache.get_multi(keys)
+    end
+    
     def method_missing(method, *args, &block)
       @cache.send(method, *args, &block)
     end

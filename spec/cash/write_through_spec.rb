@@ -219,5 +219,27 @@ module Cash
         end
       end
     end
+    
+    describe 'Transactions' do
+      def create_story_and_update
+        @story = Story.create!(:title => original_title = "original title")
+        
+        Story.transaction do
+          @story.title = "new title"
+          @story.save
+          yield if block_given?
+        end
+      end
+      
+      it 'should commit on success' do
+        create_story_and_update
+        @story.reload.title.should == "new title"
+      end
+      
+      it 'should roll back transactions when ActiveRecord::Rollback is raised' do
+        create_story_and_update { raise ActiveRecord::Rollback }
+        @story.reload.title.should == "original title"
+      end
+    end
   end
 end

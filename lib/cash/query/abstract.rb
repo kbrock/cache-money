@@ -9,6 +9,10 @@ module Cash
 
       def initialize(active_record, options1, options2)
         @active_record, @options1, @options2 = active_record, options1, options2 || {}
+        
+        if @options2.empty? and active_record.base_class != active_record
+          @options2 = { :conditions => { active_record.inheritance_column => active_record.to_s }}
+        end
       end
 
       def perform(find_options = {}, get_options = {})
@@ -27,7 +31,7 @@ module Cash
       def order
         @order ||= begin
           if order_sql = @options1[:order] || @options2[:order]
-            matched, table_name, column_name, direction = *(ORDER.match(order_sql))
+            matched, table_name, column_name, direction = *(ORDER.match(order_sql.to_s))
             [column_name, direction =~ DESC ? :desc : :asc]
           else
             ['id', :asc]

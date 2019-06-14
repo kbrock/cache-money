@@ -36,10 +36,7 @@ module Cash
       end
 
       def shallow_clone
-        clone = self.class.new
-        clone.instance_variable_set("@attributes", instance_variable_get(:@attributes))
-        clone.instance_variable_set("@new_record", new_record?)
-        clone
+        self.class.send(:instantiate, instance_variable_get(:@attributes))
       end
 
       private

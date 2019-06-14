@@ -62,7 +62,8 @@ module Cash
       buffer_command Command.new(:delete, key, *options)
     end
 
-    def get_multi(keys)
+    def get_multi(*keys)
+      keys.flatten! # arg may be a single array, or multiple strings.
       values = keys.collect { |key| get(key) }
       keys.zip(values).to_hash
     end
